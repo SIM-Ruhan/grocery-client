@@ -69,7 +69,7 @@ export default async function Page({ params }) {
           </div>
           {others.length > 0 && (
             <section className="detail-reviews">
-              <h2>Also in this collection</h2>
+              <h2>Also you may like these: </h2>
               <Cards items={others} quick />
             </section>
           )}

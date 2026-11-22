@@ -135,7 +135,7 @@ function Banners() {
               </button>
             ))}
           </div>
-          <div className="slide-buttons">
+          {/* <div className="slide-buttons">
             <button
               aria-label="Previous banner"
               onClick={() => select((index + 2) % 3)}
@@ -156,7 +156,7 @@ function Banners() {
             >
               <FiChevronRight />
             </button>
-          </div>
+          </div> */}
         </div>
       </div>
     </section>
@@ -205,13 +205,7 @@ function Marquee() {
           ))}
         </div>
       </div>
-      <button
-        className="marquee-toggle"
-        onClick={() => setPaused(!paused)}
-        aria-label={paused ? "Play service messages" : "Pause service messages"}
-      >
-        {paused ? <FiPlay /> : <FiPause />}
-      </button>
+    
     </section>
   );
 }
@@ -226,7 +220,7 @@ const brands = [
 function MarketGuide() {
   return (
     <>
-      <section className="guide" aria-label="Customer services">
+      <section className="guide px-2" aria-label="Customer services">
         <div className="guide-card">
           <span className="guide-icon">
             <FiTruck />
@@ -248,7 +242,7 @@ function MarketGuide() {
           <Link href="/dashboard?tab=Orders">My orders</Link>
         </div>
       </section>
-      <section className="brands">
+      <section className="brands px-2">
         <div className="section-head">
           <h2>Grocery brands</h2>
         </div>
@@ -277,7 +271,7 @@ export default function Home({ initialProducts }) {
         <Banners />
       </div>
       <Marquee />
-      <div className="wrap market-shelves">
+      <div className="market-shelves">
         {products ? (
           <>
             <Shelf

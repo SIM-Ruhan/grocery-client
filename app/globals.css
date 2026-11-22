@@ -590,7 +590,11 @@ small,
   }
 }
 .market-shelves {
-  padding: 10px 0 45px;
+  width: 100vw;
+  max-width: 100vw;
+  margin-inline: calc(50% - 50vw);
+  padding-left: 5px;
+  overflow-x: clip;
 }
 .shelf,
 .brands {
@@ -1889,9 +1893,7 @@ td {
   .marquee-toggle {
     padding: 10px;
   }
-  .market-shelves {
-    padding-top: 0;
-  }
+  
   .section-head {
     margin-bottom: 13px;
   }
@@ -2121,3 +2123,13 @@ td {
     letter-spacing: 0.17em;
   }
 }
+
+
+/* Full-width homepage catalog */
+html,
+body {
+  width: 100%;
+  max-width: 100%;
+  overflow-x: clip;
+}
+
