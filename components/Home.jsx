@@ -242,7 +242,7 @@ function MarketGuide() {
           <Link href="/dashboard?tab=Orders">My orders</Link>
         </div>
       </section>
-      <section className="brands px-2">
+      <section className="brands p-4">
         <div className="section-head">
           <h2>Grocery brands</h2>
         </div>
@@ -271,7 +271,7 @@ export default function Home({ initialProducts }) {
         <Banners />
       </div>
       <Marquee />
-      <div className="market-shelves">
+      <div className="market-shelves p-5 xl:p-20">
         {products ? (
           <>
             <Shelf

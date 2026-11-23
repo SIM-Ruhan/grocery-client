@@ -129,74 +129,122 @@ export function Shelf({
   theme = "leaf",
   caption = "Shop collection",
 }) {
-  const track = useRef(null),
-    [position, setPosition] = useState({ start: true, end: false });
+  const track = useRef(null);
+
+  const [position, setPosition] = useState({
+    start: true,
+    end: true,
+  });
+
   useEffect(() => {
     const el = track.current;
     if (!el) return;
-    const update = () =>
+
+    function updatePosition() {
       setPosition({
-        start: el.scrollLeft < 2,
-        end: el.scrollLeft + el.clientWidth >= el.scrollWidth - 2,
+        start: el.scrollLeft <= 2,
+        end:
+          el.scrollLeft + el.clientWidth >=
+          el.scrollWidth - 2,
       });
-    const observer = new ResizeObserver(update);
+    }
+
+    const observer = new ResizeObserver(updatePosition);
+
     observer.observe(el);
-    el.addEventListener("scroll", update, { passive: true });
-    update();
+
+    el.addEventListener("scroll", updatePosition, {
+      passive: true,
+    });
+
+    updatePosition();
+
     return () => {
       observer.disconnect();
-      el.removeEventListener("scroll", update);
+      el.removeEventListener("scroll", updatePosition);
     };
   }, [items.length]);
-  function slide(dir) {
+
+  function slide(direction) {
     const el = track.current;
+    if (!el) return;
+
     el.scrollBy({
-      left: dir * el.clientWidth * 0.82,
-      behavior: window.matchMedia("(prefers-reduced-motion: reduce)").matches
-        ? "instant"
+      left: direction * el.clientWidth * 0.82,
+      behavior: window.matchMedia(
+        "(prefers-reduced-motion: reduce)",
+      ).matches
+        ? "auto"
         : "smooth",
     });
   }
+
   if (!items.length) return null;
+
   return (
     <section className="shelf" aria-label={title}>
       <div className="section-head">
         <h2>{title}</h2>
-        <div className="shelf-tools">
-          <Link className="viewall" href={collection(title)}>
-            See all
-          </Link>
-          {!(position.start && position.end) && (
-            <div className="shelf-arrows">
-              <button
-                disabled={position.start}
-                onClick={() => slide(-1)}
-                aria-label={"Previous " + title}
-              >
-                <FiChevronLeft />
-              </button>
-              <button
-                disabled={position.end}
-                onClick={() => slide(1)}
-                aria-label={"More " + title}
-              >
-                <FiChevronRight />
-              </button>
+
+        <Link
+          className="viewall"
+          href={collection(title)}
+        >
+          See all
+        </Link>
+      </div>
+
+      <div className="relative min-w-0">
+        <div className="shelf-track" ref={track}>
+          <Link
+            className={`shelf-intro ${theme}`}
+            href={collection(title)}
+          >
+            <img
+              src={photo}
+              alt=""
+              loading="lazy"
+            />
+
+            <div>
+              <strong>{title}</strong>
+              <span>{caption}</span>
             </div>
+          </Link>
+
+          {items.slice(0, 10).map((p) => (
+            <ProductCard
+              key={p._id}
+              p={p}
+              quick
+            />
+          ))}
+        </div>
+
+        {/* Keep existing arrow colors from .shelf-arrows */}
+        <div className="shelf-arrows pointer-events-none absolute inset-0 z-10 block!">
+          {!position.start && (
+            <button
+              type="button"
+              onClick={() => slide(-1)}
+              aria-label={`Previous ${title}`}
+              className="pointer-events-auto absolute left-0 top-1/2 -translate-y-1/2 shadow-md"
+            >
+              <FiChevronLeft />
+            </button>
+          )}
+
+          {!position.end && (
+            <button
+              type="button"
+              onClick={() => slide(1)}
+              aria-label={`More ${title}`}
+              className="pointer-events-auto absolute right-0 top-1/2 -translate-y-1/2 shadow-md"
+            >
+              <FiChevronRight />
+            </button>
           )}
         </div>
-      </div>
-      <div className="shelf-track" ref={track}>
-        <Link className={"shelf-intro " + theme} href={collection(title)}>
-          <img src={photo} alt="" loading="lazy" />
-          <div>
-            <strong>{title}</strong>
-            <span>{caption}</span>
-          </div>
-        </Link>
-        {items.slice(0, 10).map((p) => (
-          <ProductCard key={p._id} p={p} quick />
-        ))}
       </div>
     </section>
   );
